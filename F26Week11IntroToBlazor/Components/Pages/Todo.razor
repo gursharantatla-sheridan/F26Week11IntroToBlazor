@@ -1,0 +1,46 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<PageTitle>Todo Example</PageTitle>
+
+
+<h3>Todo (@todos.Count(t => !t.IsDone))</h3>
+
+<div class="d-flex align-items-center mb-3">
+    <input type="text" placeholder="Something to do..." @bind="newTask" class="form-control me-2" style="max-width:400px" />
+    <button class="btn btn-primary" @onclick="AddTask">Add Task</button>
+</div>
+
+<ul class="list-unstyled">
+    @foreach (var t in todos)
+    {
+        <li class="d-flex align-items-center mb-2" style="max-width:400px">
+            <input type="checkbox" @bind="t.IsDone" class="form-check-input me-2" />
+            <input type="text" @bind="t.Task" class="form-control" />
+        </li>
+    }
+</ul>
+
+
+@code {
+    private List<TodoItem> todos = new();
+    private string newTask = "";
+
+    private void AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            TodoItem todo = new();
+            todo.Task = newTask;
+
+            todos.Add(todo);
+            newTask = "";
+        }
+    }
+
+    public class TodoItem
+    {
+        public string? Task { get; set; }
+        public bool IsDone { get; set; } = false;
+    }
+}
